@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" style={{ height: "100svh" }}>
       <body className={inter.className}>
         <div className="bg-sky-600 h-[100svh]">
-          <div className="container min-h-screen py-4 mx-auto">{children}</div>
+          <div className="container pt-4 mx-auto">{children}</div>
         </div>
       </body>
     </html>
