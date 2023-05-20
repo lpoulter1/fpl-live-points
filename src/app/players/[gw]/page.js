@@ -1,6 +1,6 @@
 const mitoma = 124;
 const macAllister = 116;
-const welbeck = 105;
+const welbeck = 103;
 const gross = 104;
 const lamptey = 114;
 
@@ -33,25 +33,6 @@ async function getGwPlayersData(gw) {
   }
 
   return res.json();
-}
-
-function getPlayerDataFromResponse(targetIds, players) {
-  const playerData = [];
-  for (const targetId of targetIds) {
-    playerData.push(players[targetId - 1]);
-  }
-  return playerData;
-}
-
-function getPlayersFromBootstrap(data, ids) {
-  const playerData = [];
-  for (const player of data) {
-    if (ids.includes(player.id)) {
-      playerData.push(player);
-    }
-  }
-
-  return playerData;
 }
 
 function getPlayerLiveData(bootstrapElements, liveData) {
@@ -141,7 +122,7 @@ export default async function Page({ params }) {
           </div>
         </div>
       </div>
-      <div className="flex items-center self-end justify-center mt-5">
+      <div className="fixed inset-0 flex items-center self-end justify-center mt-5 opacity-10">
         <Seagull />
       </div>
     </main>
