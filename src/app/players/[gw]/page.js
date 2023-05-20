@@ -108,24 +108,32 @@ export default async function Page({ params }) {
     (acc, player) => acc + player.stats.total_points,
     0
   );
+
+  const moneyWon = (jamesTotalPoints - laurieTotalPoints) * 2;
+
   return (
-    <main>
-      <div className="flex">
-        <div className="w-1/2">
-          <h2>
-            Laurie <span>{laurieTotalPoints}</span>
-          </h2>
-          {lauriePlayerData.map((player) => (
-            <Player key={player.id} player={player} />
-          ))}
+    <main className="min-h-[100svh] text-gray-100 bg-pink-600">
+      <div class="flex flex-col gap-10">
+        <div className="flex">
+          <div className="w-1/2">
+            <h2>
+              Laurie <span>{laurieTotalPoints}</span>
+            </h2>
+            {lauriePlayerData.map((player) => (
+              <Player key={player.id} player={player} />
+            ))}
+          </div>
+          <div>
+            <h2>
+              James <span>{jamesTotalPoints}</span>
+            </h2>
+            {jamesPlayerData.map((player) => (
+              <Player key={player.id} player={player} />
+            ))}
+          </div>
         </div>
-        <div>
-          <h2>
-            James <span>{jamesTotalPoints}</span>
-          </h2>
-          {jamesPlayerData.map((player) => (
-            <Player key={player.id} player={player} />
-          ))}
+        <div class="flex justify-center text-3xl">
+          James owes Laurie £{moneyWon}
         </div>
       </div>
     </main>
