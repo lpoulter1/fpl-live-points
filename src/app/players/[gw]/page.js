@@ -91,7 +91,7 @@ export default async function Page({ params }) {
     0
   );
 
-  const moneyWon = (jamesTotalPoints - laurieTotalPoints) * 2;
+  const moneyWon = (laurieTotalPoints - jamesTotalPoints) * 2;
 
   return (
     <main className="h-[100svh] text-gray-100 mx-4 mx:0">
