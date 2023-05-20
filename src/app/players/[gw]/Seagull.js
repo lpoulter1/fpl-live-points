@@ -3,8 +3,8 @@ export const Seagull = (props) => (
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"
     id="_x32_"
-    width={300}
-    height={300}
+    width={250}
+    height={250}
     viewBox="0 0 512 512"
     fill="currentColor"
     {...props}
