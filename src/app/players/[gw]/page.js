@@ -9,6 +9,7 @@ const march = 107;
 const dunk = 106;
 const estupinan = 586;
 const webster = 108;
+import { Seagull } from "./Seagull";
 
 async function getBootstrapData() {
   const res = await fetch(
@@ -112,33 +113,36 @@ export default async function Page({ params }) {
   const moneyWon = (jamesTotalPoints - laurieTotalPoints) * 2;
 
   return (
-    <main className="min-h-[100svh] text-gray-100 mx-4 mx:0">
-      <div class="flex justify-center text-2xl align-middle w-[100vw] bg-pink-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
+    <main className="h-[100svh] text-gray-100 mx-4 mx:0">
+      <div className="flex justify-center text-2xl align-middle bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
         James owes Laurie £{moneyWon}
       </div>
-      <div class="flex flex-col gap-10">
-        <div className="flex gap-2">
-          <div className="w-1/2">
+      <div className="flex flex-col gap-10">
+        <div className="flex gap-2 sm:gap-10">
+          <div className="w-[45%]">
             <h2 className="mb-3 text-2xl">
               Laurie <span className="">{laurieTotalPoints}</span>
             </h2>
-            <div class="flex flex-col gap-6">
+            <div className="flex flex-col gap-6">
               {lauriePlayerData.map((player) => (
                 <Player key={player.id} player={player} />
               ))}
             </div>
           </div>
-          <div className="">
+          <div className="w-[45%]">
             <h2 className="mb-3 text-2xl">
               James <span className="">{jamesTotalPoints}</span>
             </h2>
-            <div class="flex flex-col gap-6 w-full">
+            <div className="flex flex-col w-full gap-6">
               {jamesPlayerData.map((player) => (
                 <Player key={player.id} player={player} />
               ))}
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex items-center self-end justify-center mt-5">
+        <Seagull />
       </div>
     </main>
   );
@@ -148,12 +152,12 @@ function Player({ player }) {
   const { web_name } = player;
   const { total_points, minutes } = player.stats;
   return (
-    <div className="grid grid-cols-[1fr_100px] grid-rows-3">
-      <div className="col-span-2 font-bold bg-pink-800">{web_name}</div>
+    <div className="grid grid-cols-[1fr_fit_content] grid-rows-3">
+      <div className="col-span-2 bg-white text-sky-800">{web_name}</div>
       <div>Points:</div>
-      <div class="justify-self-center">{total_points}</div>
+      <div className="justify-self-center">{total_points}</div>
       <div>Mins:</div>
-      <div class="justify-self-center">{minutes}</div>
+      <div className="justify-self-center">{minutes}</div>
     </div>
   );
 }
