@@ -98,7 +98,10 @@ export default async function Page({ params }) {
       <div className="flex justify-center text-2xl align-middle  bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
         James owes Laurie £{moneyWon}
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="relative flex flex-col gap-10">
+        <div className="absolute inset-0 flex items-center self-end justify-center mt-5 opacity-10">
+          <Seagull />
+        </div>
         <div className="flex items-center justify-center gap-2 sm:gap-10">
           <div className="w-[45%] max-w-md">
             <h2 className="mb-3 text-2xl">
@@ -121,9 +124,6 @@ export default async function Page({ params }) {
             </div>
           </div>
         </div>
-      </div>
-      <div className="fixed inset-0 flex items-center self-end justify-center mt-5 opacity-10">
-        <Seagull />
       </div>
     </main>
   );
