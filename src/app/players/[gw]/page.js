@@ -117,7 +117,7 @@ export default async function Page({ params }) {
         <div className="flex">
           <div className="w-1/2">
             <h2>
-              Laurie <span>{laurieTotalPoints}</span>
+              Laurie <span className="text-2xl ">{laurieTotalPoints}</span>
             </h2>
             {lauriePlayerData.map((player) => (
               <Player key={player.id} player={player} />
@@ -125,7 +125,7 @@ export default async function Page({ params }) {
           </div>
           <div>
             <h2>
-              James <span>{jamesTotalPoints}</span>
+              James <span className="text-2xl ">{jamesTotalPoints}</span>
             </h2>
             {jamesPlayerData.map((player) => (
               <Player key={player.id} player={player} />
