@@ -114,12 +114,12 @@ export default async function Page({ params }) {
 
   return (
     <main className="h-[100svh] text-gray-100 mx-4 mx:0">
-      <div className="flex justify-center text-2xl align-middle bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
+      <div className="flex justify-center text-2xl align-middle  bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
         James owes Laurie £{moneyWon}
       </div>
       <div className="flex flex-col gap-10">
-        <div className="flex gap-2 sm:gap-10">
-          <div className="w-[45%]">
+        <div className="flex items-center justify-center gap-2 sm:gap-10">
+          <div className="w-[45%] max-w-md">
             <h2 className="mb-3 text-2xl">
               Laurie <span className="">{laurieTotalPoints}</span>
             </h2>
@@ -129,7 +129,7 @@ export default async function Page({ params }) {
               ))}
             </div>
           </div>
-          <div className="w-[45%]">
+          <div className="w-[45%] max-w-md">
             <h2 className="mb-3 text-2xl">
               James <span className="">{jamesTotalPoints}</span>
             </h2>
