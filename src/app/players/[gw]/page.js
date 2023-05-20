@@ -112,28 +112,32 @@ export default async function Page({ params }) {
   const moneyWon = (jamesTotalPoints - laurieTotalPoints) * 2;
 
   return (
-    <main className="min-h-[100svh] text-gray-100 bg-pink-600">
+    <main className="min-h-[100svh] text-gray-100 mx-4 mx:0">
+      <div class="flex justify-center text-2xl align-middle w-[100vw] bg-pink-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
+        James owes Laurie £{moneyWon}
+      </div>
       <div class="flex flex-col gap-10">
-        <div className="flex">
+        <div className="flex gap-2">
           <div className="w-1/2">
-            <h2>
-              Laurie <span className="text-2xl ">{laurieTotalPoints}</span>
+            <h2 className="mb-3 text-2xl">
+              Laurie <span className="">{laurieTotalPoints}</span>
             </h2>
-            {lauriePlayerData.map((player) => (
-              <Player key={player.id} player={player} />
-            ))}
+            <div class="flex flex-col gap-6">
+              {lauriePlayerData.map((player) => (
+                <Player key={player.id} player={player} />
+              ))}
+            </div>
           </div>
-          <div>
-            <h2>
-              James <span className="text-2xl ">{jamesTotalPoints}</span>
+          <div className="">
+            <h2 className="mb-3 text-2xl">
+              James <span className="">{jamesTotalPoints}</span>
             </h2>
-            {jamesPlayerData.map((player) => (
-              <Player key={player.id} player={player} />
-            ))}
+            <div class="flex flex-col gap-6 w-full">
+              {jamesPlayerData.map((player) => (
+                <Player key={player.id} player={player} />
+              ))}
+            </div>
           </div>
-        </div>
-        <div class="flex justify-center text-3xl">
-          James owes Laurie £{moneyWon}
         </div>
       </div>
     </main>
@@ -144,8 +148,12 @@ function Player({ player }) {
   const { web_name } = player;
   const { total_points, minutes } = player.stats;
   return (
-    <div>
-      {web_name} | points: {total_points} | mins: {minutes}
+    <div className="grid grid-cols-[1fr_100px] grid-rows-3">
+      <div className="col-span-2 font-bold bg-pink-800">{web_name}</div>
+      <div>Points:</div>
+      <div class="justify-self-center">{total_points}</div>
+      <div>Mins:</div>
+      <div class="justify-self-center">{minutes}</div>
     </div>
   );
 }
