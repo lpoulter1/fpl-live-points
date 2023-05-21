@@ -4,7 +4,7 @@ const welbeck = 103;
 const gross = 104;
 const lamptey = 114;
 
-const ferguson = 598;
+const ferguson = 596;
 const march = 107;
 const dunk = 106;
 const estupinan = 586;
