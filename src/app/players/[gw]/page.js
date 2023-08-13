@@ -77,6 +77,10 @@ export default async function Page({ params }) {
   const { elements } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
 
+  if (gwPlayerData.elements.length === 0) {
+    return <div>No GW data</div>;
+  }
+
   const { lauriePlayerData, jamesPlayerData } = getPlayerLiveData(
     elements,
     gwPlayerData
