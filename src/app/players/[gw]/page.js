@@ -1,14 +1,14 @@
-const mitoma = 124;
-const macAllister = 116;
-const welbeck = 103;
-const gross = 104;
-const lamptey = 114;
+const pedro = 135; //2367557
+const estupinan = 131;
+const ferguson = 132;
+const steele = 148;
+const igor = 606;
 
-const ferguson = 596;
-const march = 107;
-const dunk = 106;
-const estupinan = 586;
-const webster = 108;
+const dunk = 129;
+const encio = 130;
+const mitoma = 143;
+const march = 140;
+const gross = 134;
 
 import { Seagull } from "./Seagull";
 
@@ -37,8 +37,8 @@ async function getGwPlayersData(gw) {
 }
 
 function getPlayerLiveData(bootstrapElements, liveData) {
-  const laurieTeam = [mitoma, macAllister, welbeck, gross, lamptey];
-  const jamesTeam = [ferguson, march, dunk, estupinan, webster];
+  const jamesTeam = [pedro, estupinan, ferguson, steele, igor];
+  const laurieTeam = [dunk, encio, mitoma, march, gross];
 
   const lauriePlayerData = [];
   const jamesPlayerData = [];
@@ -133,10 +133,10 @@ export default async function Page({ params }) {
 function Player({ player }) {
   const { web_name } = player;
   const { total_points, minutes } = player.stats;
-  const lol = web_name === "Bevan" ? "Fergie" : web_name;
+  // const lol = web_name === "Bevan" ? "Fergie" : web_name;
   return (
     <div className="grid grid-cols-[1fr_fit_content] grid-rows-3">
-      <div className="col-span-2 bg-white text-sky-800">{lol}</div>
+      <div className="col-span-2 bg-white text-sky-800">{web_name}</div>
       <div>Points:</div>
       <div className="justify-self-center">{total_points}</div>
       <div>Mins:</div>
