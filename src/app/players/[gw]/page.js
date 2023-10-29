@@ -3,9 +3,11 @@ const estupinan = 131;
 const ferguson = 132;
 const steele = 148;
 const igor = 606;
+const vanHecke = 150;
 
 const dunk = 129;
 const encio = 130;
+const fati = 700;
 const mitoma = 143;
 const march = 140;
 const gross = 134;
@@ -37,8 +39,8 @@ async function getGwPlayersData(gw) {
 }
 
 function getPlayerLiveData(bootstrapElements, liveData) {
-  const jamesTeam = [pedro, estupinan, ferguson, steele, igor];
-  const laurieTeam = [dunk, encio, mitoma, march, gross];
+  const jamesTeam = [pedro, estupinan, ferguson, steele, vanHecke];
+  const laurieTeam = [dunk, fati, mitoma, march, gross];
 
   const lauriePlayerData = [];
   const jamesPlayerData = [];
