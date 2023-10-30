@@ -7,7 +7,7 @@ const veltman = 151;
 
 const dunk = 129;
 const encio = 130;
-const fati = 699;
+const fati = 700;
 const mitoma = 143;
 const march = 140;
 const gross = 134;
@@ -16,7 +16,7 @@ import { Seagull } from "./Seagull";
 
 async function getBootstrapData() {
   const res = await fetch(
-    `https://draft.premierleague.com/api/bootstrap-static`
+    `https://fantasy.premierleague.com/api/bootstrap-static/`
   );
 
   if (!res.ok) {
@@ -38,13 +38,6 @@ async function getGwPlayersData(gw) {
   return res.json();
 }
 
-function getTeamPlayers(teamId, bootstrapElements) {
-  return bootstrapElements.filter((player) => {
-    console.log("player", player.team);
-    return player.team === teamId;
-  });
-}
-
 function getPlayerLiveData(bootstrapElements, liveData) {
   const jamesTeam = [pedro, estupinan, ferguson, steele, veltman];
   const laurieTeam = [dunk, fati, mitoma, march, gross];
@@ -52,35 +45,38 @@ function getPlayerLiveData(bootstrapElements, liveData) {
   const lauriePlayerData = [];
   const jamesPlayerData = [];
 
-  for (const player of bootstrapElements) {
-    if (laurieTeam.includes(player.id)) {
-      for (const element of liveData.elements) {
-        const { id, web_name, src } = player;
-        if (element.id === id) {
-          console.log("element", element);
-          const { stats } = element;
-          lauriePlayerData.push({
-            id,
-            web_name,
-            stats,
-            src,
-          });
-        }
+  bootstrapElements.forEach((player) => {
+    const { id: bootstrapId } = player;
+
+    if (laurieTeam.includes(bootstrapId)) {
+      const element = liveData.elements.find((e) => e.id === bootstrapId);
+      if (element) {
+        const { web_name, src } = player;
+        const { stats } = element;
+        lauriePlayerData.push({
+          bootstrapId,
+          liveId: element.id,
+          web_name,
+          stats,
+          src,
+        });
       }
     }
 
-    if (jamesTeam.includes(player.id)) {
-      const { id, web_name, src } = player;
-      const { stats } = liveData.elements[id - 1];
-
-      jamesPlayerData.push({
-        id,
-        web_name,
-        src,
-        stats,
-      });
+    if (jamesTeam.includes(bootstrapId)) {
+      const element = liveData.elements.find((e) => e.id === bootstrapId);
+      if (element) {
+        const { web_name, src } = player;
+        const { stats } = element;
+        jamesPlayerData.push({
+          bootstrapId,
+          web_name,
+          stats,
+          src,
+        });
+      }
     }
-  }
+  });
 
   return { lauriePlayerData, jamesPlayerData };
 }
@@ -89,7 +85,10 @@ export default async function Page({ params }) {
   const { gw } = params;
   const { elements } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
-
+  console.log(
+    "700",
+    elements.find((e) => e.id === 700)
+  );
   // const brightonTeamCode = "36";
   // const brightonPlayers = getTeamPlayers(brightonTeamCode, elements);
   // console.log("brightonPlayers", brightonPlayers);
@@ -103,7 +102,7 @@ export default async function Page({ params }) {
     gwPlayerData
   );
 
-  console.log("lauriePlayerData", lauriePlayerData);
+  // console.log("lauriePlayerData", lauriePlayerData);
 
   const jamesTotalPoints = jamesPlayerData.reduce(
     (acc, player) => acc + player.stats.total_points,
