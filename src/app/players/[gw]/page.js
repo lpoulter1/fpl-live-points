@@ -3,11 +3,11 @@ const estupinan = 131;
 const ferguson = 132;
 const steele = 148;
 const igor = 606;
-const vanHecke = 150;
+const veltman = 151;
 
 const dunk = 129;
 const encio = 130;
-const fati = 700;
+const fati = 699;
 const mitoma = 143;
 const march = 140;
 const gross = 134;
@@ -38,8 +38,15 @@ async function getGwPlayersData(gw) {
   return res.json();
 }
 
+function getTeamPlayers(teamId, bootstrapElements) {
+  return bootstrapElements.filter((player) => {
+    console.log("player", player.team);
+    return player.team === teamId;
+  });
+}
+
 function getPlayerLiveData(bootstrapElements, liveData) {
-  const jamesTeam = [pedro, estupinan, ferguson, steele, vanHecke];
+  const jamesTeam = [pedro, estupinan, ferguson, steele, veltman];
   const laurieTeam = [dunk, fati, mitoma, march, gross];
 
   const lauriePlayerData = [];
@@ -47,15 +54,19 @@ function getPlayerLiveData(bootstrapElements, liveData) {
 
   for (const player of bootstrapElements) {
     if (laurieTeam.includes(player.id)) {
-      const { id, web_name, src } = player;
-      const { stats } = liveData.elements[id - 1];
-
-      lauriePlayerData.push({
-        id,
-        web_name,
-        stats,
-        src,
-      });
+      for (const element of liveData.elements) {
+        const { id, web_name, src } = player;
+        if (element.id === id) {
+          console.log("element", element);
+          const { stats } = element;
+          lauriePlayerData.push({
+            id,
+            web_name,
+            stats,
+            src,
+          });
+        }
+      }
     }
 
     if (jamesTeam.includes(player.id)) {
@@ -79,6 +90,10 @@ export default async function Page({ params }) {
   const { elements } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
 
+  // const brightonTeamCode = "36";
+  // const brightonPlayers = getTeamPlayers(brightonTeamCode, elements);
+  // console.log("brightonPlayers", brightonPlayers);
+
   if (gwPlayerData.elements.length === 0) {
     return <div>No GW data</div>;
   }
@@ -87,6 +102,8 @@ export default async function Page({ params }) {
     elements,
     gwPlayerData
   );
+
+  console.log("lauriePlayerData", lauriePlayerData);
 
   const jamesTotalPoints = jamesPlayerData.reduce(
     (acc, player) => acc + player.stats.total_points,
