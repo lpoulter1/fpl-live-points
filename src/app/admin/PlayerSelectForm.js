@@ -1,11 +1,11 @@
 "use client";
-import { Dropdown } from "./Dropdown";
 
-export function PlayerSelectForm({ items }) {
-  const handleOnSubmit = (e) => {
+export function PlayerSelectForm({ items, updateDrafters }) {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     console.log(e.target.drafter.value);
     console.log(e.target.player.value);
+    await updateDrafters();
   };
   return (
     <form onSubmit={handleOnSubmit}>

@@ -1,4 +1,5 @@
 import { PlayerSelectForm } from "./PlayerSelectForm";
+import { sql } from "@vercel/postgres";
 
 async function getBootstrapData() {
   const res = await fetch(
@@ -20,16 +21,27 @@ function findBrightonPlayers(elements) {
 export default async function Admin() {
   const { elements } = await getBootstrapData();
   const brightonPlayers = findBrightonPlayers(elements);
+
   const formattedBrightonPlayers = brightonPlayers.map((player) => {
     return {
       id: player.id,
       name: player.web_name,
     };
   });
+  const updateDrafters = async (e) => {
+    "use server";
+    await sql`INSERT INTO drafters (name, players) VALUES 
+    ('Laurie', 
+    '[{"id": 1, "name": "Adringa"}, {"id": 2, "name": "Player 2"}]'
+    );`;
+  };
 
   return (
     <div>
-      <PlayerSelectForm items={formattedBrightonPlayers} />
+      <PlayerSelectForm
+        items={formattedBrightonPlayers}
+        updateDrafters={updateDrafters}
+      />
     </div>
   );
 }

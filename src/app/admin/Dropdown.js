@@ -1,4 +1,3 @@
-"use client";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
 export function Dropdown({ items }) {

@@ -14,7 +14,7 @@ const gross = 134;
 
 import { Seagull } from "./Seagull";
 
-export async function getBootstrapData() {
+async function getBootstrapData() {
   const res = await fetch(
     `https://fantasy.premierleague.com/api/bootstrap-static/`
   );
