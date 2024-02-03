@@ -52,7 +52,7 @@ export default async function Admin() {
       <div>
         {rows.map((row) => (
           <div key={row.id}>
-            {row.name} -
+            {row.fpl_bootstrap_id} - {row.name} -
             {
               brightonPlayers.find(
                 (player) => player.id === row.fpl_bootstrap_id

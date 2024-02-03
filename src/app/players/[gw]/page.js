@@ -1,16 +1,3 @@
-// const pedro = 135; //2367557
-// const estupinan = 131;
-// const ferguson = 132;
-// const steele = 148;
-// const igor = 606;
-// const veltman = 151;
-
-// const dunk = 129;
-// const encio = 130;
-// const fati = 700;
-// const mitoma = 143;
-// const march = 140;
-// const gross = 134;
 import { getDraftedPlayers } from "../../db/utils";
 
 import { Seagull } from "./Seagull";
@@ -40,9 +27,6 @@ async function getGwPlayersData(gw) {
 }
 
 function getPlayerLiveData(bootstrapElements, liveData, jamesTeam, laurieTeam) {
-  // const jamesTeam = [pedro, estupinan, ferguson, steele, veltman];
-  // const laurieTeam = [dunk, fati, mitoma, march, gross];
-
   const lauriePlayerData = [];
   const jamesPlayerData = [];
 
@@ -82,17 +66,45 @@ function getPlayerLiveData(bootstrapElements, liveData, jamesTeam, laurieTeam) {
   return { lauriePlayerData, jamesPlayerData };
 }
 
+async function getFixturesData() {
+  const res = await fetch(`https://fantasy.premierleague.com/api/fixtures/`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch data: ${res.statusText}`);
+  }
+
+  return res.json();
+}
+
+function findTopBps(fixture) {
+  const bps = fixture.stats.find((s) => s.identifier === "bps");
+  const { a, h } = bps;
+  return [...a, ...h].sort((a, b) => b.value - a.value);
+}
+
+function filterBrightonFixtures(fixtures) {
+  const brightonTeamId = 5;
+  return fixtures.filter(
+    (fixture) =>
+      fixture.team_a === brightonTeamId || fixture.team_h === brightonTeamId
+  );
+}
+
+function findPlayerById(id, elements) {
+  return elements.find((e) => e.id === id);
+}
+
 export default async function Page({ params }) {
   const { gw } = params;
   const { elements } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
-  // console.log(
-  //   "700",
-  //   elements.find((e) => e.id === 700)
-  // );
-  // const brightonTeamCode = "36";
-  // const brightonPlayers = getTeamPlayers(brightonTeamCode, elements);
-  // console.log("brightonPlayers", brightonPlayers);
+  const fixtures = await getFixturesData();
+
+  let brightonFixtures = filterBrightonFixtures(fixtures);
+  const thisGwFixture = brightonFixtures.find((f) => f.event === Number(gw));
+  const playersByBps = findTopBps(thisGwFixture).map((p) => {
+    return { value: p.value, element: findPlayerById(p.element, elements) };
+  });
 
   if (gwPlayerData.elements.length === 0) {
     return <div>No GW data</div>;
@@ -102,8 +114,7 @@ export default async function Page({ params }) {
   const jamesTeam = getPlayersData.filter((p) => p.name === "james");
   const laurieTeam = getPlayersData.filter((p) => p.name === "laurie");
 
-  console.log("jamesTeam", jamesTeam);
-  console.log("laurieTeam", laurieTeam);
+  console.log("top 3 bps", playersByBps.slice(0, 3));
 
   const { lauriePlayerData, jamesPlayerData } = getPlayerLiveData(
     elements,
@@ -111,8 +122,6 @@ export default async function Page({ params }) {
     jamesTeam,
     laurieTeam
   );
-
-  // console.log("lauriePlayerData", lauriePlayerData);
 
   const jamesTotalPoints = jamesPlayerData.reduce(
     (acc, player) => acc + player.stats.total_points,
@@ -129,7 +138,7 @@ export default async function Page({ params }) {
   return (
     <main className="h-[100svh] text-gray-100 mx-4 mx:0">
       <div className="flex justify-center text-2xl align-middle  bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
-        James owes Laurie £{moneyWon}
+        GW:{gw} James owes Laurie £{moneyWon}
       </div>
       <div className="relative flex flex-col gap-10">
         <div className="absolute inset-0 flex items-center self-end justify-center mt-5 opacity-10">
@@ -156,6 +165,14 @@ export default async function Page({ params }) {
               ))}
             </div>
           </div>
+        </div>
+        <div>
+          BPS Kings:
+          {playersByBps.slice(0, 3).map((p) => (
+            <div key={p.element.id}>
+              {p.element.web_name} - {p.value}
+            </div>
+          ))}
         </div>
       </div>
     </main>
