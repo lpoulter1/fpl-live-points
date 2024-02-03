@@ -1,16 +1,17 @@
-const pedro = 135; //2367557
-const estupinan = 131;
-const ferguson = 132;
-const steele = 148;
-const igor = 606;
-const veltman = 151;
+// const pedro = 135; //2367557
+// const estupinan = 131;
+// const ferguson = 132;
+// const steele = 148;
+// const igor = 606;
+// const veltman = 151;
 
-const dunk = 129;
-const encio = 130;
-const fati = 700;
-const mitoma = 143;
-const march = 140;
-const gross = 134;
+// const dunk = 129;
+// const encio = 130;
+// const fati = 700;
+// const mitoma = 143;
+// const march = 140;
+// const gross = 134;
+import { getDraftedPlayers } from "../../db/utils";
 
 import { Seagull } from "./Seagull";
 
@@ -38,9 +39,9 @@ async function getGwPlayersData(gw) {
   return res.json();
 }
 
-function getPlayerLiveData(bootstrapElements, liveData) {
-  const jamesTeam = [pedro, estupinan, ferguson, steele, veltman];
-  const laurieTeam = [dunk, fati, mitoma, march, gross];
+function getPlayerLiveData(bootstrapElements, liveData, jamesTeam, laurieTeam) {
+  // const jamesTeam = [pedro, estupinan, ferguson, steele, veltman];
+  // const laurieTeam = [dunk, fati, mitoma, march, gross];
 
   const lauriePlayerData = [];
   const jamesPlayerData = [];
@@ -48,7 +49,7 @@ function getPlayerLiveData(bootstrapElements, liveData) {
   bootstrapElements.forEach((player) => {
     const { id: bootstrapId } = player;
 
-    if (laurieTeam.includes(bootstrapId)) {
+    if (laurieTeam.find((p) => p.fpl_bootstrap_id === bootstrapId)) {
       const element = liveData.elements.find((e) => e.id === bootstrapId);
       if (element) {
         const { web_name, src } = player;
@@ -63,7 +64,7 @@ function getPlayerLiveData(bootstrapElements, liveData) {
       }
     }
 
-    if (jamesTeam.includes(bootstrapId)) {
+    if (jamesTeam.find((p) => p.fpl_bootstrap_id === bootstrapId)) {
       const element = liveData.elements.find((e) => e.id === bootstrapId);
       if (element) {
         const { web_name, src } = player;
@@ -85,10 +86,10 @@ export default async function Page({ params }) {
   const { gw } = params;
   const { elements } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
-  console.log(
-    "700",
-    elements.find((e) => e.id === 700)
-  );
+  // console.log(
+  //   "700",
+  //   elements.find((e) => e.id === 700)
+  // );
   // const brightonTeamCode = "36";
   // const brightonPlayers = getTeamPlayers(brightonTeamCode, elements);
   // console.log("brightonPlayers", brightonPlayers);
@@ -97,9 +98,18 @@ export default async function Page({ params }) {
     return <div>No GW data</div>;
   }
 
+  const getPlayersData = await getDraftedPlayers();
+  const jamesTeam = getPlayersData.filter((p) => p.name === "james");
+  const laurieTeam = getPlayersData.filter((p) => p.name === "laurie");
+
+  console.log("jamesTeam", jamesTeam);
+  console.log("laurieTeam", laurieTeam);
+
   const { lauriePlayerData, jamesPlayerData } = getPlayerLiveData(
     elements,
-    gwPlayerData
+    gwPlayerData,
+    jamesTeam,
+    laurieTeam
   );
 
   // console.log("lauriePlayerData", lauriePlayerData);
