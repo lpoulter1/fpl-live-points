@@ -28,12 +28,18 @@ export default async function Admin() {
       name: player.web_name,
     };
   });
-  const updateDrafters = async (e) => {
+
+  let { rows } = await sql`SELECT * from DRAFTERS`;
+  const updateDrafters = async ({ drafter, player }) => {
     "use server";
-    await sql`INSERT INTO drafters (name, players) VALUES 
-    ('Laurie', 
-    '[{"id": 1, "name": "Adringa"}, {"id": 2, "name": "Player 2"}]'
-    );`;
+    console.log(player.id);
+    console.log(JSON.stringify(player));
+    await sql`
+      INSERT INTO drafters (name, fpl_bootstrap_id)
+      VALUES (${drafter}, ${player.id});
+    `;
+
+    // rows = await sql`SELECT * from DRAFTERS`;
   };
 
   return (
@@ -42,6 +48,19 @@ export default async function Admin() {
         items={formattedBrightonPlayers}
         updateDrafters={updateDrafters}
       />
+
+      <div>
+        {rows.map((row) => (
+          <div key={row.id}>
+            {row.name} -
+            {
+              brightonPlayers.find(
+                (player) => player.id === row.fpl_bootstrap_id
+              ).web_name
+            }
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

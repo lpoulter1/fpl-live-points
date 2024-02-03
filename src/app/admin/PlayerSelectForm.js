@@ -1,11 +1,20 @@
 "use client";
+import { useRouter } from "next/navigation";
 
 export function PlayerSelectForm({ items, updateDrafters }) {
+  const router = useRouter();
   const handleOnSubmit = async (e) => {
-    e.preventDefault();
-    console.log(e.target.drafter.value);
-    console.log(e.target.player.value);
-    await updateDrafters();
+    // e.preventDefault();
+    const player = items.find(
+      (item) => item.id === parseInt(e.target.player.value)
+    );
+
+    await updateDrafters({
+      drafter: e.target.drafter.value,
+      player,
+    });
+
+    router.reload();
   };
   return (
     <form onSubmit={handleOnSubmit}>
@@ -16,7 +25,7 @@ export function PlayerSelectForm({ items, updateDrafters }) {
       <select name="player">
         {items.map((player) => {
           return (
-            <option key={player.id} value={player}>
+            <option key={player.id} value={player.id}>
               {player.name}
             </option>
           );
