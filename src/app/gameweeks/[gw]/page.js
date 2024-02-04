@@ -1,4 +1,4 @@
-import { getDraftedPlayers } from "../../db/utils";
+import { getDraftedPlayers } from "../../_db/utils";
 
 import { Seagull } from "./Seagull";
 
