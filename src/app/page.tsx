@@ -63,7 +63,7 @@ export default async function fixtures() {
       Fixtures
       {brightonFixtures.map((fixture) => (
         <div key={fixture.id}>
-          <Link href={`/players/${fixture.event}`}>GW: {fixture.event}</Link>
+          <Link href={`/gameweeks/${fixture.event}`}>GW: {fixture.event}</Link>
           <br />
           {getTeamName(fixture.team_h, teams)} Vs{" "}
           {getTeamName(fixture.team_a, teams)}
