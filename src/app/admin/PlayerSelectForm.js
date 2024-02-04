@@ -18,11 +18,11 @@ export function PlayerSelectForm({ items, updateDrafters }) {
   };
   return (
     <form onSubmit={handleOnSubmit}>
-      <select name="drafter">
+      <select name="drafter" className="text-gray-800">
         <option value="laurie">Laurie</option>
         <option value="james">James</option>
       </select>
-      <select name="player">
+      <select name="player" className="text-gray-800">
         {items.map((player) => {
           return (
             <option key={player.id} value={player.id}>
