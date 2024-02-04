@@ -16,9 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" style={{ height: "100svh" }}>
+    <html lang="en" style={{ minHeight: "100svh" }}>
       <body className={inter.className}>
-        <div className="bg-sky-600 h-[100svh]">
+        <div className="bg-sky-600 min-h-[100svh]">
           <div className="container pt-4 mx-auto">{children}</div>
         </div>
       </body>
