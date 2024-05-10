@@ -134,7 +134,7 @@ export default async function Page({ params }) {
   const moneyWon = (laurieTotalPoints - jamesTotalPoints) * 2;
 
   return (
-    <main className="h-[100svh] text-gray-100 mx-4 mx:0">
+    <main className="min-h-[100svh] text-gray-100 mx-4 mx:0">
       <div className="flex justify-center text-2xl align-middle  bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
         GW:{gw} James owes Laurie £{moneyWon}
       </div>
