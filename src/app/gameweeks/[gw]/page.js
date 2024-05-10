@@ -1,4 +1,5 @@
 import { getDraftedPlayers } from "../../_db/utils";
+import { notFound } from "next/navigation";
 
 async function getBootstrapData() {
   const res = await fetch(
@@ -18,7 +19,8 @@ async function getGwPlayersData(gw) {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data", res);
+    console.log(`failed to fetcth ${gw} gw data`, res);
+    notFound();
   }
 
   return res.json();
@@ -92,14 +94,21 @@ function findPlayerById(id, elements) {
   return elements.find((e) => e.id === id);
 }
 
+function mapTeamById(teams, id) {
+  return teams.find((t) => t.id === id);
+}
+
 export default async function Page({ params }) {
   const { gw } = params;
-  const { elements } = await getBootstrapData();
+  const { elements, teams } = await getBootstrapData();
   const gwPlayerData = await getGwPlayersData(gw);
   const fixtures = await getFixturesData();
 
   let brightonFixtures = filterBrightonFixtures(fixtures);
   const thisGwFixture = brightonFixtures.find((f) => f.event === Number(gw));
+  const { team_a, team_h } = thisGwFixture;
+  const homeTeam = mapTeamById(teams, team_h);
+  const awayTeam = mapTeamById(teams, team_a);
   const playersByBps = findTopBps(thisGwFixture).map((p) => {
     return { value: p.value, element: findPlayerById(p.element, elements) };
   });
@@ -111,8 +120,6 @@ export default async function Page({ params }) {
   const getPlayersData = await getDraftedPlayers();
   const jamesTeam = getPlayersData.filter((p) => p.name === "james");
   const laurieTeam = getPlayersData.filter((p) => p.name === "laurie");
-
-  console.log("top 3 bps", playersByBps.slice(0, 3));
 
   const { lauriePlayerData, jamesPlayerData } = getPlayerLiveData(
     elements,
@@ -134,50 +141,55 @@ export default async function Page({ params }) {
   const moneyWon = (laurieTotalPoints - jamesTotalPoints) * 2;
 
   return (
-    <main className="min-h-[100svh] text-gray-100 mx-4 mx:0">
-      <div className="flex justify-center text-2xl align-middle  bg-sky-800 mx-[-16px] mb-6 py-3 mt-[-16px]">
-        GW:{gw} James owes Laurie £{moneyWon}
+    <>
+      <div className="flex flex-col items-center justify-center w-full gap-2 px-4 py-3 mb-6 text-2xl align-middle bg-sky-800">
+        <p className="text-sm">
+          GW:{gw} - {homeTeam.name} vs {awayTeam.name}
+        </p>
+        <h1>James owes Laurie £{moneyWon}</h1>
       </div>
-      <div className="relative flex flex-col gap-10">
-        <div className="flex items-center justify-center gap-2 sm:gap-10">
-          <div className="w-[45%] max-w-md">
-            <h2 className="mb-3 text-2xl">
-              Laurie <span className="">{laurieTotalPoints}</span>
-            </h2>
-            <div className="flex flex-col gap-6">
-              {lauriePlayerData.map((player) => (
-                <Player key={player.id} player={player} />
-              ))}
+      <main className="min-h-[100svh] text-gray-100 mx-4">
+        <div className="relative flex flex-col gap-10">
+          <div className="flex items-center justify-center gap-2 sm:gap-10">
+            <div className="w-[45%] max-w-md">
+              <h2 className="mb-3 text-2xl">
+                Laurie <span className="">{laurieTotalPoints}</span>
+              </h2>
+              <div className="flex flex-col gap-6">
+                {lauriePlayerData.map((player) => (
+                  <Player key={player.id} player={player} />
+                ))}
+              </div>
+            </div>
+            <div className="w-[45%] max-w-md">
+              <h2 className="mb-3 text-2xl">
+                James <span className="">{jamesTotalPoints}</span>
+              </h2>
+              <div className="flex flex-col w-full gap-6">
+                {jamesPlayerData.map((player) => (
+                  <Player key={player.id} player={player} />
+                ))}
+              </div>
             </div>
           </div>
-          <div className="w-[45%] max-w-md">
-            <h2 className="mb-3 text-2xl">
-              James <span className="">{jamesTotalPoints}</span>
-            </h2>
-            <div className="flex flex-col w-full gap-6">
-              {jamesPlayerData.map((player) => (
-                <Player key={player.id} player={player} />
-              ))}
-            </div>
+          <div>
+            BPS Kings:
+            {playersByBps.slice(0, 3).map((p) => (
+              <div key={p.element.id}>
+                {p.element.web_name} - {p.value}
+              </div>
+            ))}
           </div>
         </div>
-        <div>
-          BPS Kings:
-          {playersByBps.slice(0, 3).map((p) => (
-            <div key={p.element.id}>
-              {p.element.web_name} - {p.value}
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 
 function Player({ player }) {
   const { web_name } = player;
   const { total_points, minutes } = player.stats;
-  // const lol = web_name === "Bevan" ? "Fergie" : web_name;
+
   return (
     <div className="grid grid-cols-[1fr_fit_content] grid-rows-3">
       <div className="col-span-2 bg-white text-sky-800">{web_name}</div>

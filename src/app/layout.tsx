@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" style={{ minHeight: "100svh" }}>
       <body className={inter.className}>
         <div className="bg-sky-600 min-h-[100svh] text-white">
-          <div className="container pt-4 mx-auto">{children}</div>
+          <div className="container mx-auto">{children}</div>
           <div className="absolute inset-0 flex items-center self-end justify-center mt-5 opacity-10">
             <Seagull />
           </div>
