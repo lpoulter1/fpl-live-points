@@ -59,17 +59,23 @@ export default async function fixtures() {
   const { teams } = await getBootstrapData();
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       Fixtures
       {brightonFixtures.map((fixture) => (
-        <div key={fixture.id}>
-          <Link href={`/gameweeks/${fixture.event}`}>GW: {fixture.event}</Link>
-          <br />
-          {getTeamName(fixture.team_h, teams)} Vs{" "}
-          {getTeamName(fixture.team_a, teams)}
-          <div>
-            {fixture.team_h_score} - {fixture.team_a_score}
-          </div>
+        <div
+          key={fixture.id}
+          className="flex flex-col gap-2 pb-2 border-b border-sky-400"
+        >
+          <Link
+            href={`/gameweeks/${fixture.event}`}
+            className="hover:text-sky-300"
+          >
+            GW: {fixture.event} {getTeamName(fixture.team_h, teams)} Vs{" "}
+            {getTeamName(fixture.team_a, teams)}
+            <div>
+              {fixture.team_h_score} - {fixture.team_a_score}
+            </div>
+          </Link>
         </div>
       ))}
     </div>
