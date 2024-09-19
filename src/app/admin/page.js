@@ -42,22 +42,56 @@ export default async function Admin() {
     // rows = await sql`SELECT * from DRAFTERS`;
   };
 
+  const deleteAllPlayers = async () => {
+    "use server";
+    console.log("deleting all players");
+    await sql`DELETE FROM drafters`;
+    const rows = await sql`SELECT * from DRAFTERS`;
+  };
+
+  const deletePlayer = async (fpl_bootstrap_id) => {
+    "use server";
+    console.log(`Deleting player with fpl_bootstrap_id: ${fpl_bootstrap_id}`);
+    await sql`DELETE FROM drafters WHERE fpl_bootstrap_id = ${fpl_bootstrap_id}`;
+    const rows = await sql`SELECT * from DRAFTERS`;
+  };
+
   return (
     <div>
       <PlayerSelectForm
         items={formattedBrightonPlayers}
         updateDrafters={updateDrafters}
       />
-
+      <form action={deleteAllPlayers}>
+        <button
+          type="submit"
+          className="p-2 mt-4 text-white bg-red-500 rounded cursor-pointer"
+        >
+          Delete All Players
+        </button>
+      </form>
       <div>
         {rows.map((row) => (
-          <div key={row.id}>
-            {row.fpl_bootstrap_id} - {row.name} -
-            {
-              brightonPlayers.find(
-                (player) => player.id === row.fpl_bootstrap_id
-              ).web_name
-            }
+          <div
+            key={row.fpl_bootstrap_id}
+            className="flex items-center justify-between mb-2"
+          >
+            <span>
+              {row.fpl_bootstrap_id} - {row.name} -
+              {
+                brightonPlayers.find(
+                  (player) => player.id === row.fpl_bootstrap_id
+                )?.web_name
+              }
+            </span>
+            <form action={deletePlayer.bind(null, row.fpl_bootstrap_id)}>
+              <button
+                type="submit"
+                className="px-2 py-1 text-white bg-red-500 rounded cursor-pointer"
+              >
+                Delete
+              </button>
+            </form>
           </div>
         ))}
       </div>
