@@ -106,9 +106,14 @@ export default async function Page({ params }) {
 
   let brightonFixtures = filterBrightonFixtures(fixtures);
   const thisGwFixture = brightonFixtures.find((f) => f.event === Number(gw));
+
   const { team_a, team_h } = thisGwFixture;
   const homeTeam = mapTeamById(teams, team_h);
   const awayTeam = mapTeamById(teams, team_a);
+  if (thisGwFixture.started === false) {
+    return <div>Gameweek game not started</div>;
+  }
+
   const playersByBps = findTopBps(thisGwFixture).map((p) => {
     return { value: p.value, element: findPlayerById(p.element, elements) };
   });
