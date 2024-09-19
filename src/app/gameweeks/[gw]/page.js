@@ -1,5 +1,7 @@
 import { getDraftedPlayers } from "../../_db/utils";
 import { notFound } from "next/navigation";
+import Link from 'next/link';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 async function getBootstrapData() {
   const res = await fetch(
@@ -148,9 +150,17 @@ export default async function Page({ params }) {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full gap-2 px-4 py-3 mb-6 text-2xl align-middle bg-sky-800">
-        <p className="text-sm">
-          GW:{gw} - {homeTeam.name} vs {awayTeam.name}
-        </p>
+        <div className="flex items-center justify-between w-full">
+          <Link href={`/gameweeks/${Number(gw) - 1}`} className="text-white hover:text-gray-300">
+            <ChevronLeftIcon className="w-6 h-6" />
+          </Link>
+          <p className="text-sm">
+            GW:{gw} - {homeTeam.name} vs {awayTeam.name}
+          </p>
+          <Link href={`/gameweeks/${Number(gw) + 1}`} className="text-white hover:text-gray-300">
+            <ChevronRightIcon className="w-6 h-6" />
+          </Link>
+        </div>
         <h1>James owes Laurie £{moneyWon}</h1>
       </div>
       <main className="min-h-[100svh] text-gray-100 mx-4">
